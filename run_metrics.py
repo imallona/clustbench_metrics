@@ -37,9 +37,9 @@ def load_labels(data_file):
 def main():
     parser = argparse.ArgumentParser(description='clustbench fastcluster runner')
 
-    parser.add_argument('--predicted', type=str,
+    parser.add_argument('--clustering.predicted', type=str,
                         help='gz-compressed textfile containing the clustering result labels.', required = True)
-    parser.add_argument('--truth', type=int,
+    parser.add_argument('--data.true_labels', type=int,
                         help='gz-compressed textfile containing the true labels.', required = True)
     parser.add_argument('--output_dir', type=str,
                         help='output directory to store data files.')
@@ -54,9 +54,11 @@ def main():
         parser.print_help()
         sys.exit(0)
 
-    truth = load_labels(args.truth)
-    predicted = load_labels(args.predicted)
-
+    
+    truth = load_labels(getattr(args, 'data.true_labels'))
+    predicted = load_labels(getattr(args, 'clustering.predicted'))
+    name = args.name
+    
     if args.metric == 'normalized_clustering_accuracy':
         metric = genieclust.compare_partitions.normalized_clustering_accuracy
     elif args.metric == 'adjusted_fm_score':
@@ -74,6 +76,7 @@ def main():
                        warn_if_missing=True) 
    
     print(scores)
+    np.savetxt(os.path.join(args.output_dir, f"{name}.scores.gz"), scores, delimiter=",")
  
 
 if __name__ == "__main__":
