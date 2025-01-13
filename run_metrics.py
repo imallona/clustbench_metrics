@@ -51,74 +51,6 @@ def load_predicted_labels(data_file):
 
     return([header, values])
 
-# ## adapted from https://github.com/gagolews/clustering-benchmarks/blob/0e751cc9dfc30f332ea3e3aac2b95ada8fbc266a/clustbench/score.py#L30
-# ## author M Gagolewski
-
-# def get_scores_across_ks(
-#     labels,
-#     results,
-#     metric=genieclust.compare_partitions.normalized_clustering_accuracy,
-#     compute_max=True,
-#     warn_if_missing=True
-# ):
-#     """
-#     Computes a similarity score between the reference and the predicted partition
-
-#     Takes into account that there can be more than one ground truth partition
-#     and ignores the noise points (as explained in the Methodology section
-#     of the clustering benchmark framework's website).
-
-#     If ``labels`` is a single label vector, it will be wrapped inside
-#     a list. If ``results`` is not a dictionary,
-#     `labels_list_to_dict` will be called first.
-
-
-#     Parameters
-#     ----------
-
-#     labels
-#         A vector-like object or a list thereof.
-
-#     results
-#         A dictionary of clustering results, where
-#         ``results[K]`` gives a K-partition.
-
-#     metric : function
-#         An external cluster validity measure; defaults to
-#         ``genieclust.compare_partitions.normalized_clustering_accuracy``.
-#         It will be called like ``metric(y_true, y_pred)``.
-
-#     compute_max : bool
-#         Whether to apply ``max`` on the particular similarity scores.
-
-#     warn_if_missing : bool
-#         Warn if some ``results[K]`` is required, but missing.
-
-#     Returns
-#     -------
-
-#     score : float or array thereof
-#         The computed similarity scores. Ultimately, it is a vector of
-#         ``metric(y_true[y_true>0], results[max(y_true)][y_true>0])``
-#         over all ``y_true`` in ``labels``
-#         or the maximum thereof if ``compute_max`` is ``True``.
-#     """
-
-#     scores = []
-    
-#     y_true = labels
-#     y_pred = results
-    
-#     if np.min(y_pred) < 1 or np.max(y_pred) > k:
-#         raise ValueError("`results[k]` is not between 1 and k=%d, min is %d and max is %d." % (k, np.min(y_pred), np.max(y_pred)))
-    
-#     scores.append(metric(y_true[y_true > 0], y_pred[y_true > 0]))
-
-#     if compute_max and len(scores) > 0:
-#         return np.nanmax(scores)
-#     else:
-#         return np.array(scores)
-
 
 ## adapted from https://github.com/gagolews/clustering-benchmarks/blob/0e751cc9dfc30f332ea3e3aac2b95ada8fbc266a/clustbench/score.py#L30
 ## author M Gagolewski
@@ -196,7 +128,7 @@ def get_single_score(
 def main():
     parser = argparse.ArgumentParser(description='clustbench fastcluster runner')
 
-    parser.add_argument('--clustering.predicted', type=str,
+    parser.add_argument('--clustering.predicted_ks_range', type=str,
                         help='gz-compressed textfile containing the clustering result labels.', required = True)
     parser.add_argument('--data.true_labels', type=str,
                         help='gz-compressed textfile containing the true labels.', required = True)
@@ -214,7 +146,7 @@ def main():
         sys.exit(0)
     
     truth = load_true_labels(getattr(args, 'data.true_labels'))
-    ks, predicted = load_predicted_labels(getattr(args, 'clustering.predicted'))
+    ks, predicted = load_predicted_labels(getattr(args, 'clustering.predicted_ks_range'))
     
     name = args.name
 
