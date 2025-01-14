@@ -20,11 +20,10 @@ VALID_METRICS = ['normalized_clustering_accuracy'
                  'adjusted_fm_score',
                  'adjusted_mi_score',
                  'adjusted_rand_score',
-                 'compare_partitions',
                  'fm_score',
                  'mi_score',
                  'normalized_clustering_accuracy',
-                 'normalized_confusion_matrix',
+                 # 'normalized_confusion_matrix',
                  'normalized_mi_score',
                  'normalized_pivoted_accuracy',
                  'pair_sets_index',
@@ -155,6 +154,24 @@ def main():
         metric = genieclust.compare_partitions.normalized_clustering_accuracy
     elif args.metric == 'adjusted_fm_score':
         metric = genieclust.compare_partitions.adjusted_fm_score
+    elif args.metric == 'adjusted_mi_score':
+        metric = genieclust.compare_partitions.adjusted_mi_score
+    elif args.metric == 'adjusted_rand_score':
+        metric = genieclust.compare_partitions.adjusted_rand_score
+    elif args.metric == 'fm_score':
+        metric = genieclust.compare_partitions.fm_score
+    elif args.metric == 'mi_score':
+        metric = genieclust.compare_partitions.mi_score
+    elif args.metric == 'normalized_clustering_accuracy':
+        metric = genieclust.compare_partitions.normalized_clustering_accuracy
+    elif args.metric == 'normalized_mi_score':
+        metric = genieclust.compare_partitions.normalized_mi_score
+    elif args.metric == 'normalized_pivoted_accuracy':
+        metric = genieclust.compare_partitions.normalized_pivoted_accuracy
+    elif args.metric == 'pair_sets_index':
+        metric = genieclust.compare_partitions.pair_sets_index
+    elif args.metric == 'rand_score':
+        metric = genieclust.compare_partitions.rand_score
     elif args.metric not in VALID_METRICS:
         raise ValueError("Invalid metric.")
     else:
