@@ -5,6 +5,8 @@ Omnibenchmark-izes Markek Gagolewski's https://github.com/gagolews/clustering-be
 
 Expects 2D clustering result arrays, e.g. partitions with 5 columns. Being k the true num of clusters, both 
   input and outputs will have 5 columns, k-2, k-1, k, k+1 and k+2
+
+Doesn't take cluster 0 (noise points) into account
 """
 
 import argparse
@@ -116,7 +118,8 @@ def get_single_score(
     
     if np.min(y_pred) < 1 or np.max(y_pred) > k + 2:
         raise ValueError("`results[k]` is not between 1 and k=%d + 2, min is %d and max is %d." % (k, np.min(y_pred), np.max(y_pred)))
-    
+
+    ## mind cluster 0 means noise; so we do no take noise points into account
     scores.append(metric(y_true[y_true > 0], y_pred[y_true > 0]))
 
     if compute_max and len(scores) > 0:
